@@ -1,0 +1,56 @@
+﻿@model MyTwitterStats.Models.Stats
+
+@{
+	ViewBag.Title = "title";
+}
+<!-- GENERAL -->
+<p>Total tweet count: @Model.TotalTweetCount</p>
+<p>First tweet: @Model.FirstTweet.Text</p>
+<p>Last tweet: @Model.LastTweet.Text</p>
+<p>Tweeting for days: @Model.LifeSpan.Days</p>
+<p>Tweets per day: @Model.TweetsPerDay.ToString("0.##")</p>
+<p>Most used client: @Model.MostUsedClientName (@Model.MostUsedClientCount times)</p>
+
+<!-- RETWEETS -->
+<p>Retweet count: @Model.RetweetCount</p>
+<p>Retweets per day: @Model.RetweetsPerDay.ToString("0.##")</p>
+<p>Most retweeted account: @Model.MostRetweetedAccountName (@Model.MostRetweetedAccountCount times)</p>
+<p>Fastest retweet: @Model.FastestRetweet.Text (in @Model.FastestRetweetSpan.Seconds seconds)</p>
+
+<!-- MENTIONS & REPLIES -->
+<p>Mention count: @Model.MentionCount</p>
+<p>Reply count: @Model.ReplyCount</p>
+<p>Most mentioned account account: @Model.MostMentionedAccountName (@Model.MostMentionedAccountCount times)</p>
+<p>Most replied account account: @Model.MostRepliedAccountName (@Model.MostRepliedAccountCount times)</p>
+
+<!-- HASHTAGS -->
+<p>Most used hashtag: #@Model.MostUsedHashtagText (@Model.MostUsedHashtagCount times)</p>
+<p>Longest hashtag: #@Model.LongestHastag (@Model.LongestHastag.Length chars)</p>
+<p>Shortest hashtag: #@Model.ShortestHastag (@Model.ShortestHastag.Length chars)</p>
+
+<!-- DATE & TIME -->
+<p>Most tweeted day of week: @Model.MostTweetedDayOfWeekName (@Model.MostTweetedDayOfWeekCount times)</p>
+<p>Most tweeted day: @Model.MostTweetedDay.ToShortDateString() (@Model.MostTweetedDayCount times)</p>
+<p>Least tweeted day: @Model.LeastTweetedDayName (@Model.LeastTweetedDayCount times)</p>
+<p>Most tweeted hour: @Model.MostTweetedHour (@Model.MostTweetedHourCount times)</p>
+<p>Least tweeted hour: @Model.LeastTweetedHour (@Model.LeastTweetedHourCount times)</p>
+<p>Longest time not tweeted: @Model.LongestTimeNotTweeted.Days days (Between @Model.NotTweetedStartTweet.CreatedAt.ToShortDateString() &amp; @Model.NotTweetedEndTweet.CreatedAt.ToShortDateString())</p>
+
+<!-- TEXT ANALYSYS -->
+<p>Total characters typed: @Model.TotalCharCount</p>
+<p>Average characters typed per tweet: @Model.AverageCharCount</p>
+<p>Total words typed: @Model.TotalWordCount</p>
+<p>Average words typed per tweet: @Model.AverageWordCount</p>
+<p>Most used word: @Model.MostUsedWord (@Model.MostUsedWordCount times)</p>
+<p>Most duplicated tweet: @Model.MostDuplicatedTweet (@Model.MostDuplicatedTweetCount times)</p>
+<p>Links tweeted: @Model.LinkCount</p>
+
+<!-- LINKS -->
+<p>Most linked URL: @Model.MostLinkedUrl (@Model.MostLinkedUrlCount times)</p>
+<p>Most linked domain: @Model.MostLinkedDomain (@Model.MostLinkedDomainCount times)</p>
+
+<!-- 3RD PARTY -->
+<p>Foursquare tweet count: @Model.ThirdPartySourceCounts["foursquare"]</p>
+<p>Instagram tweet count: @Model.ThirdPartySourceCounts["Instagram"]</p>
+<p>Tumblr tweet count: @Model.ThirdPartySourceCounts["Tumblr"]</p>
+<p>RunKeeper tweet count: @Model.ThirdPartySourceCounts["RunKeeper"]</p>
