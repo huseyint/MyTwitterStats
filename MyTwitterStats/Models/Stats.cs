@@ -16,6 +16,8 @@ namespace MyTwitterStats.Models
 			};
 		}
 
+		public User OwnerAccount { get; set; }
+
 		public int TotalTweetCount { get; set; }
 
 		public Tweet FirstTweet { get; set; }

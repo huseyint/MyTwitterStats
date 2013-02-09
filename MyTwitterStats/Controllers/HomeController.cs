@@ -56,6 +56,8 @@ namespace MyTwitterStats.Controllers
 
 			var stats = new Stats();
 
+			stats.OwnerAccount = allTweets.First().User;
+
 			// A. GENERAL
 			// A.1. Total tweets
 			stats.TotalTweetCount = allTweets.Length;

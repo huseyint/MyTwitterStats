@@ -1,42 +1,74 @@
 ﻿@model MyTwitterStats.Models.Stats
 
 @{
-	ViewBag.Title = "title";
+	ViewBag.Title = "Twitter stats for @" + Model.OwnerAccount.ScreenName;
 }
-<!-- GENERAL -->
+<div class="row">
+	  <div class="span3 bs-docs-sidebar">
+		<ul class="nav nav-list sidenav" data-spy="affix">
+		  <li><a href="#general"><i class="icon-chevron-right"></i> General</a></li>
+		  <li><a href="#retweets"><i class="icon-chevron-right"></i> Retweets</a></li>
+		  <li><a href="#mentionsReplies"><i class="icon-chevron-right"></i> Mentions &amp; Replies</a></li>
+		  <li><a href="#hashtags"><i class="icon-chevron-right"></i> Hashtags</a></li>
+		  <li><a href="#dateTime"><i class="icon-chevron-right"></i> Date &amp; Time</a></li>
+		  <li><a href="#textAnalysys"><i class="icon-chevron-right"></i> Text Analysys</a></li>
+		  <li><a href="#links"><i class="icon-chevron-right"></i> Links</a></li>
+		  <li><a href="#thirdParty"><i class="icon-chevron-right"></i> Third Party</a></li>
+		</ul>
+	  </div>
+	<div class="span9">
+		<section id="general">
+		  <div class="page-header">
+			<h1>General</h1>
+		  </div>
 <p>Total tweet count: @Model.TotalTweetCount</p>
 <p>First tweet: @Model.FirstTweet.Text</p>
 <p>Last tweet: @Model.LastTweet.Text</p>
 <p>Tweeting for days: @Model.LifeSpan.Days</p>
 <p>Tweets per day: @Model.TweetsPerDay.ToString("0.##")</p>
 <p>Most used client: @Model.MostUsedClientName (@Model.MostUsedClientCount times)</p>
-
-<!-- RETWEETS -->
+		</section>
+		<section id="retweets">
+		  <div class="page-header">
+			<h1>Retweets</h1>
+		  </div>
 <p>Retweet count: @Model.RetweetCount</p>
 <p>Retweets per day: @Model.RetweetsPerDay.ToString("0.##")</p>
 <p>Most retweeted account: @Model.MostRetweetedAccountName (@Model.MostRetweetedAccountCount times)</p>
 <p>Fastest retweet: @Model.FastestRetweet.Text (in @Model.FastestRetweetSpan.Seconds seconds)</p>
-
-<!-- MENTIONS & REPLIES -->
+		</section>
+		<section id="mentionsReplies">
+		  <div class="page-header">
+			<h1>Mentions &amp; Replies</h1>
+		  </div>
 <p>Mention count: @Model.MentionCount</p>
 <p>Reply count: @Model.ReplyCount</p>
 <p>Most mentioned account account: @Model.MostMentionedAccountName (@Model.MostMentionedAccountCount times)</p>
 <p>Most replied account account: @Model.MostRepliedAccountName (@Model.MostRepliedAccountCount times)</p>
-
-<!-- HASHTAGS -->
+		</section>
+		<section id="hashtags">
+		  <div class="page-header">
+			<h1>Hashtags</h1>
+		  </div>
 <p>Most used hashtag: #@Model.MostUsedHashtagText (@Model.MostUsedHashtagCount times)</p>
 <p>Longest hashtag: #@Model.LongestHastag (@Model.LongestHastag.Length chars)</p>
 <p>Shortest hashtag: #@Model.ShortestHastag (@Model.ShortestHastag.Length chars)</p>
-
-<!-- DATE & TIME -->
+		</section>
+		<section id="dateTime">
+		  <div class="page-header">
+			<h1>Date &amp; Time</h1>
+		  </div>
 <p>Most tweeted day of week: @Model.MostTweetedDayOfWeekName (@Model.MostTweetedDayOfWeekCount times)</p>
 <p>Most tweeted day: @Model.MostTweetedDay.ToShortDateString() (@Model.MostTweetedDayCount times)</p>
 <p>Least tweeted day: @Model.LeastTweetedDayName (@Model.LeastTweetedDayCount times)</p>
 <p>Most tweeted hour: @Model.MostTweetedHour (@Model.MostTweetedHourCount times)</p>
 <p>Least tweeted hour: @Model.LeastTweetedHour (@Model.LeastTweetedHourCount times)</p>
 <p>Longest time not tweeted: @Model.LongestTimeNotTweeted.Days days (Between @Model.NotTweetedStartTweet.CreatedAt.ToShortDateString() &amp; @Model.NotTweetedEndTweet.CreatedAt.ToShortDateString())</p>
-
-<!-- TEXT ANALYSYS -->
+		</section>
+		<section id="textAnalysys">
+		  <div class="page-header">
+			<h1>Text Analysys</h1>
+		  </div>
 <p>Total characters typed: @Model.TotalCharCount</p>
 <p>Average characters typed per tweet: @Model.AverageCharCount</p>
 <p>Total words typed: @Model.TotalWordCount</p>
@@ -44,13 +76,22 @@
 <p>Most used word: @Model.MostUsedWord (@Model.MostUsedWordCount times)</p>
 <p>Most duplicated tweet: @Model.MostDuplicatedTweet (@Model.MostDuplicatedTweetCount times)</p>
 <p>Links tweeted: @Model.LinkCount</p>
-
-<!-- LINKS -->
+		</section>
+		<section id="links">
+		  <div class="page-header">
+			<h1>Links</h1>
+		  </div>
 <p>Most linked URL: @Model.MostLinkedUrl (@Model.MostLinkedUrlCount times)</p>
 <p>Most linked domain: @Model.MostLinkedDomain (@Model.MostLinkedDomainCount times)</p>
-
-<!-- 3RD PARTY -->
+		</section>
+		<section id="thirdParty">
+		  <div class="page-header">
+			<h1>Third Party</h1>
+		  </div>
 <p>Foursquare tweet count: @Model.ThirdPartySourceCounts["foursquare"]</p>
 <p>Instagram tweet count: @Model.ThirdPartySourceCounts["Instagram"]</p>
 <p>Tumblr tweet count: @Model.ThirdPartySourceCounts["Tumblr"]</p>
 <p>RunKeeper tweet count: @Model.ThirdPartySourceCounts["RunKeeper"]</p>
+		</section>
+	</div>
+</div>
