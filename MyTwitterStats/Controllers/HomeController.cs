@@ -206,10 +206,12 @@ namespace MyTwitterStats.Controllers
 			stats.MostUsedWordCount = mostUsedWord.Count();
 
 			// F.6. Duplicate tweets
-			var mostDuplicatedTweet =
-				allTweets.GroupBy(t => t.Text).Where(g => g.Count() > 1).OrderByDescending(g => g.Count()).First();
-			stats.MostDuplicatedTweet = mostDuplicatedTweet.Key;
-			stats.MostDuplicatedTweetCount = mostDuplicatedTweet.Count();
+			var mostDuplicatedTweet = allTweets.GroupBy(t => t.Text).Where(g => g.Count() > 1).OrderByDescending(g => g.Count()).FirstOrDefault();
+			if (mostDuplicatedTweet != null)
+			{
+				stats.MostDuplicatedTweet = mostDuplicatedTweet.Key;
+				stats.MostDuplicatedTweetCount = mostDuplicatedTweet.Count();
+			}
 
 			// G. LINKS
 			// G.1. Link count
