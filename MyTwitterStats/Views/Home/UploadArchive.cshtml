@@ -1,97 +1,203 @@
-﻿@model MyTwitterStats.Models.Stats
+﻿@using System.Globalization
+@using MyTwitterStats.Helpers
+@model MyTwitterStats.Models.Stats
 
 @{
 	ViewBag.Title = "Twitter stats for @" + Model.OwnerAccount.ScreenName;
 }
 <div class="row">
-	  <div class="span3 bs-docs-sidebar">
+	<div class="span3 bs-docs-sidebar">
 		<ul class="nav nav-list sidenav" data-spy="affix">
-		  <li><a href="#general"><i class="icon-chevron-right"></i> General</a></li>
-		  <li><a href="#retweets"><i class="icon-chevron-right"></i> Retweets</a></li>
-		  <li><a href="#mentionsReplies"><i class="icon-chevron-right"></i> Mentions &amp; Replies</a></li>
-		  <li><a href="#hashtags"><i class="icon-chevron-right"></i> Hashtags</a></li>
-		  <li><a href="#dateTime"><i class="icon-chevron-right"></i> Date &amp; Time</a></li>
-		  <li><a href="#textAnalysys"><i class="icon-chevron-right"></i> Text Analysys</a></li>
-		  <li><a href="#links"><i class="icon-chevron-right"></i> Links</a></li>
-		  <li><a href="#thirdParty"><i class="icon-chevron-right"></i> Third Party</a></li>
+			<li><a href="#general"><i class="icon-chevron-right"></i> General</a></li>
+			<li><a href="#retweets"><i class="icon-chevron-right"></i> Retweets</a></li>
+			<li><a href="#mentionsReplies"><i class="icon-chevron-right"></i> Mentions &amp; Replies</a></li>
+			<li><a href="#hashtags"><i class="icon-chevron-right"></i> Hashtags</a></li>
+			<li><a href="#dateTime"><i class="icon-chevron-right"></i> Date &amp; Time</a></li>
+			<li><a href="#textAnalysys"><i class="icon-chevron-right"></i> Text Analysys</a></li>
+			<li><a href="#links"><i class="icon-chevron-right"></i> Links</a></li>
+			<li><a href="#thirdParty"><i class="icon-chevron-right"></i> Third Party</a></li>
 		</ul>
-	  </div>
+	</div>
 	<div class="span9">
 		<section id="general">
-		  <div class="page-header">
-			<h1>General</h1>
-		  </div>
-<p>Total tweet count: @Model.TotalTweetCount</p>
-<p>First tweet: @Model.FirstTweet.Text</p>
-<p>Last tweet: @Model.LastTweet.Text</p>
-<p>Tweeting for days: @Model.LifeSpan.Days</p>
-<p>Tweets per day: @Model.TweetsPerDay.ToString("0.##")</p>
-<p>Most used client: @Model.MostUsedClientName (@Model.MostUsedClientCount times)</p>
+			<div class="page-header">
+				<h1>General</h1>
+			</div>
+			<h2>Total tweet count</h2>
+			<div id="counter-tweetCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>First tweet</h2>
+			@Html.Tweet(Model.FirstTweet)
+			<h2>Last tweet</h2>
+			@Html.Tweet(Model.LastTweet)
+			<h2>Tweeting for days</h2>
+			<div id="counter-lifeSpan" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Tweets per day</h2>
+			<p>@Model.TweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
+			<h2>Most used client <small>(@Model.MostUsedClientCount times)</small></h2>
+			<p>@Model.MostUsedClientName</p>
 		</section>
 		<section id="retweets">
-		  <div class="page-header">
-			<h1>Retweets</h1>
-		  </div>
-<p>Retweet count: @Model.RetweetCount</p>
-<p>Retweets per day: @Model.RetweetsPerDay.ToString("0.##")</p>
-<p>Most retweeted account: @Model.MostRetweetedAccountName (@Model.MostRetweetedAccountCount times)</p>
-<p>Fastest retweet: @Model.FastestRetweet.Text (in @Model.FastestRetweetSpan.Seconds seconds)</p>
+			<div class="page-header">
+				<h1>Retweets</h1>
+			</div>
+			<h2>Retweet count</h2>
+			<div id="counter-retweetCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Retweets per day</h2>
+			<p>@Model.RetweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
+			<h2>Most retweeted account <small>(@Model.MostRetweetedAccountCount times)</small></h2>
+			<p>@Model.MostRetweetedAccountName</p>
+			<h2>Fastest retweet <small>(in @Model.FastestRetweetSpan.Seconds seconds)</small></h2>
+			@Html.Tweet(Model.FastestRetweet)
 		</section>
 		<section id="mentionsReplies">
-		  <div class="page-header">
-			<h1>Mentions &amp; Replies</h1>
-		  </div>
-<p>Mention count: @Model.MentionCount</p>
-<p>Reply count: @Model.ReplyCount</p>
-<p>Most mentioned account account: @Model.MostMentionedAccountName (@Model.MostMentionedAccountCount times)</p>
-<p>Most replied account account: @Model.MostRepliedAccountName (@Model.MostRepliedAccountCount times)</p>
+			<div class="page-header">
+				<h1>Mentions &amp; Replies</h1>
+			</div>
+			<h2>Mention count</h2>
+			<div id="counter-mentionCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Reply count</h2>
+			<div id="counter-replyCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Most mentioned account <small>(@Model.MostMentionedAccountCount times)</small></h2>
+			<p>@Model.MostMentionedAccountName</p>
+			<h2>Most replied account <small>(@Model.MostRepliedAccountCount times)</small></h2>
+			<p>@Model.MostRepliedAccountName</p>
 		</section>
 		<section id="hashtags">
-		  <div class="page-header">
-			<h1>Hashtags</h1>
-		  </div>
-<p>Most used hashtag: #@Model.MostUsedHashtagText (@Model.MostUsedHashtagCount times)</p>
-<p>Longest hashtag: #@Model.LongestHastag (@Model.LongestHastag.Length chars)</p>
-<p>Shortest hashtag: #@Model.ShortestHastag (@Model.ShortestHastag.Length chars)</p>
+			<div class="page-header">
+				<h1>Hashtags</h1>
+			</div>
+			<h2>Most used hashtag <small>(@Model.MostUsedHashtagCount times)</small></h2>
+			<p>#@Model.MostUsedHashtagText</p>
+			<h2>Longest hashtag <small>(@Model.LongestHastag.Length chars)</small></h2>
+			<p>#@Model.LongestHastag</p>
+			<h2>Shortest hashtag <small>(@Model.ShortestHastag.Length chars)</small></h2>
+			<p>#@Model.ShortestHastag</p>
 		</section>
 		<section id="dateTime">
-		  <div class="page-header">
-			<h1>Date &amp; Time</h1>
-		  </div>
-<p>Most tweeted day of week: @Model.MostTweetedDayOfWeekName (@Model.MostTweetedDayOfWeekCount times)</p>
-<p>Most tweeted day: @Model.MostTweetedDay.ToShortDateString() (@Model.MostTweetedDayCount times)</p>
-<p>Least tweeted day: @Model.LeastTweetedDayName (@Model.LeastTweetedDayCount times)</p>
-<p>Most tweeted hour: @Model.MostTweetedHour (@Model.MostTweetedHourCount times)</p>
-<p>Least tweeted hour: @Model.LeastTweetedHour (@Model.LeastTweetedHourCount times)</p>
-<p>Longest time not tweeted: @Model.LongestTimeNotTweeted.Days days (Between @Model.NotTweetedStartTweet.CreatedAt.ToShortDateString() &amp; @Model.NotTweetedEndTweet.CreatedAt.ToShortDateString())</p>
+			<div class="page-header">
+				<h1>Date &amp; Time</h1>
+			</div>
+			<h2>Most tweeted day of week <small>(@Model.MostTweetedDayOfWeekCount times)</small></h2>
+			<p>@Model.MostTweetedDayOfWeekName</p>
+			<h2>Most tweeted day <small>(@Model.MostTweetedDayCount times)</small></h2>
+			<p>@Model.MostTweetedDay.ToString("D", CultureInfo.InvariantCulture)</p>
+			<h2>Least tweeted day <small>(@Model.LeastTweetedDayCount times)</small></h2>
+			<p>@Model.LeastTweetedDayName</p>
+			<h2>Most tweeted hour <small>(@Model.MostTweetedHourCount times)</small></h2>
+			<p>@Model.MostTweetedHour.ToString("0#"):00</p>
+			<h2>Least tweeted hour <small>(@Model.LeastTweetedHourCount times)</small></h2>
+			<p>@Model.LeastTweetedHour.ToString("0#"):00</p>
+			<h2>Longest time not tweeted <small>(between @Model.NotTweetedStartTweet.CreatedAt.ToString("d", CultureInfo.InvariantCulture) &amp; @Model.NotTweetedEndTweet.CreatedAt.ToString("d", CultureInfo.InvariantCulture))</small></h2>
+			<p>@Model.LongestTimeNotTweeted.Days days</p>
 		</section>
 		<section id="textAnalysys">
-		  <div class="page-header">
-			<h1>Text Analysys</h1>
-		  </div>
-<p>Total characters typed: @Model.TotalCharCount</p>
-<p>Average characters typed per tweet: @Model.AverageCharCount</p>
-<p>Total words typed: @Model.TotalWordCount</p>
-<p>Average words typed per tweet: @Model.AverageWordCount</p>
-<p>Most used word: @Model.MostUsedWord (@Model.MostUsedWordCount times)</p>
-<p>Most duplicated tweet: @Model.MostDuplicatedTweet (@Model.MostDuplicatedTweetCount times)</p>
-<p>Links tweeted: @Model.LinkCount</p>
+			<div class="page-header">
+				<h1>Text Analysys</h1>
+			</div>
+			<h2>Total characters typed</h2>
+			<div id="counter-totalCharCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Average characters typed per tweet</h2>
+			<div id="counter-averageCharCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Total words typed</h2>
+			<div id="counter-totalWordCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Average words typed per tweet</h2>
+			<div id="counter-averageWordCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Most used word <small>(@Model.MostUsedWordCount times)</small></h2>
+			<p>@Model.MostUsedWord</p>
+			<h2>Most duplicated tweet <small>(@Model.MostDuplicatedTweetCount times)</small></h2>
+			<p>@Model.MostDuplicatedTweet</p>
 		</section>
 		<section id="links">
-		  <div class="page-header">
-			<h1>Links</h1>
-		  </div>
-<p>Most linked URL: @Model.MostLinkedUrl (@Model.MostLinkedUrlCount times)</p>
-<p>Most linked domain: @Model.MostLinkedDomain (@Model.MostLinkedDomainCount times)</p>
+			<div class="page-header">
+				<h1>Links</h1>
+			</div>
+			<h2>Links tweeted</h2>
+			<div id="counter-linkCount" class="flip-counter"></div><div class="clearfix"></div>
+			<h2>Most linked URL <small>(@Model.MostLinkedUrlCount times)</small></h2>
+			<p><a href="@Model.MostLinkedUrl">@Model.MostLinkedUrl</a></p>
+			<h2>Most linked domain <small>(@Model.MostLinkedDomainCount times)</small></h2>
+			<p><a href="http://@Model.MostLinkedDomain">@Model.MostLinkedDomain</a></p>
 		</section>
 		<section id="thirdParty">
-		  <div class="page-header">
-			<h1>Third Party</h1>
-		  </div>
-<p>Foursquare tweet count: @Model.ThirdPartySourceCounts["foursquare"]</p>
-<p>Instagram tweet count: @Model.ThirdPartySourceCounts["Instagram"]</p>
-<p>Tumblr tweet count: @Model.ThirdPartySourceCounts["Tumblr"]</p>
-<p>RunKeeper tweet count: @Model.ThirdPartySourceCounts["RunKeeper"]</p>
+			<div class="page-header">
+				<h1>Third Party</h1>
+			</div>
+			@if (Model.ThirdPartySourceCounts["foursquare"] > 0)
+			{
+			<h2>Foursquare tweet count</h2>
+			<div id="counter-foursquare" class="flip-counter"></div><div class="clearfix"></div>
+			}
+			@if (Model.ThirdPartySourceCounts["Instagram"] > 0)
+			{
+			<h2>Instagram tweet count</h2>
+			<div id="counter-instagram" class="flip-counter"></div><div class="clearfix"></div>
+			}
+			@if (Model.ThirdPartySourceCounts["Tumblr"] > 0)
+			{
+			<h2>Tumblr tweet count</h2>
+			<div id="counter-tumblr" class="flip-counter"></div><div class="clearfix"></div>
+			}
+			@if (Model.ThirdPartySourceCounts["RunKeeper"] > 0)
+			{
+				<h2>RunKeeper tweet count</h2>
+				<div id="counter-runkeeper" class="flip-counter"></div><div class="clearfix"></div>
+			}
 		</section>
 	</div>
 </div>
+
+@*<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>*@
+
+
+<script type="text/javascript">
+//<![CDATA[
+
+$(function() {
+	var time = 1;
+	var pace = 200;
+	
+	var tweetCount = new flipCounter('counter-tweetCount', {});
+	tweetCount.incrementTo(@Model.TotalTweetCount, time, pace);
+	
+	var lifeSpan = new flipCounter('counter-lifeSpan', {});
+	lifeSpan.incrementTo(@Model.LifeSpan.Days, time, pace);
+	
+	var retweetCount = new flipCounter('counter-retweetCount', {});
+	retweetCount.incrementTo(@Model.RetweetCount, time, pace);
+	
+	var mentionCount = new flipCounter('counter-mentionCount', {});
+	mentionCount.incrementTo(@Model.MentionCount, time, pace);
+	
+	var replyCount = new flipCounter('counter-replyCount', {});
+	replyCount.incrementTo(@Model.ReplyCount, time, pace);
+	
+	var totalCharCount = new flipCounter('counter-totalCharCount', {});
+	totalCharCount.incrementTo(@Model.TotalCharCount, time, pace);
+	
+	var averageCharCount = new flipCounter('counter-averageCharCount', {});
+	averageCharCount.incrementTo(@Model.AverageCharCount, time, pace);
+	
+	var totalWordCount = new flipCounter('counter-totalWordCount', {});
+	totalWordCount.incrementTo(@Model.TotalWordCount, time, pace);
+	
+	var averageWordCount = new flipCounter('counter-averageWordCount', {});
+	averageWordCount.incrementTo(@Model.AverageWordCount, time, pace);
+	
+	var linkCount = new flipCounter('counter-linkCount', {});
+	linkCount.incrementTo(@Model.LinkCount, time, pace);
+	
+	var foursquare = new flipCounter('counter-foursquare', {});
+	foursquare.incrementTo(@Model.ThirdPartySourceCounts["foursquare"], time, pace);
+	
+	var instagram = new flipCounter('counter-instagram', {});
+	instagram.incrementTo(@Model.ThirdPartySourceCounts["Instagram"], time, pace);
+	
+	var tumblr = new flipCounter('counter-tumblr', {});
+	tumblr.incrementTo(@Model.ThirdPartySourceCounts["Tumblr"], time, pace);
+	
+	var runkeeper = new flipCounter('counter-runkeeper', {});
+	runkeeper.incrementTo(@Model.ThirdPartySourceCounts["RunKeeper"], time, pace);
+});
+
+//]]>
+</script>

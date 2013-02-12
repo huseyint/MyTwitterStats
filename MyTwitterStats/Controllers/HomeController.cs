@@ -63,8 +63,8 @@ namespace MyTwitterStats.Controllers
 			stats.TotalTweetCount = allTweets.Length;
 
 			// A.2. Tweets per day
-			stats.FirstTweet = allTweets.First();
-			stats.LastTweet = allTweets.Last();
+			stats.FirstTweet = allTweets.First(t => t.RetweetedStatus == null);
+			stats.LastTweet = allTweets.Last(t => t.RetweetedStatus == null);
 			stats.LifeSpan = stats.LastTweet.CreatedAt - stats.FirstTweet.CreatedAt;
 			stats.TweetsPerDay = stats.TotalTweetCount/stats.LifeSpan.TotalDays;
 

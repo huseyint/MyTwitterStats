@@ -8,6 +8,10 @@
 	<link href="/Content/bootstrap-fileupload.min.css" rel="stylesheet" media="screen">
 	<link href="/Content/bootstrap-responsive.css" rel="stylesheet">
 	<link href="/Content/site.css" rel="stylesheet">
+	
+	<script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.9.1.min.js")"></script>
+	<script type="text/javascript" src="@Url.Content("/Scripts/flipcounter.min.js")"></script>
+	<link type="text/css" href="/Content/counter.css" rel="stylesheet" />
 </head>
 	<body data-spy="scroll" data-target=".bs-docs-sidebar">
 		<div class="navbar navbar-inverse navbar-fixed-top">
@@ -18,7 +22,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="brand" href="#">My Twitter Stats</a>
+				<a class="brand" href="/">My Twitter Stats</a>
 				@*<div class="nav-collapse collapse">
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
@@ -34,7 +38,6 @@
 		@RenderBody()
 		</div> <!-- /container -->
 
-		<script type="text/javascript" src="@Url.Content("/Scripts/jquery-1.9.1.min.js")"></script>
 		<script type="text/javascript" src="@Url.Content("/Scripts/bootstrap.min.js")"></script>
 		<script type="text/javascript" src="@Url.Content("/Scripts/bootstrap-fileupload.min.js")"></script>
 	</body>

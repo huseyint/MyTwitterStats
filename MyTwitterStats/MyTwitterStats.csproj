@@ -71,6 +71,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\TweetHelper.cs" />
     <Compile Include="Models\Entities.cs" />
     <Compile Include="Models\Geo.cs" />
     <Compile Include="Models\Hashtag.cs" />
@@ -93,6 +94,10 @@
     <Content Include="Content\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\counter.css" />
+    <Content Include="Content\images\digits-bottom.png" />
+    <Content Include="Content\images\digits-top.png" />
+    <Content Include="Content\images\digits.png" />
     <Content Include="Content\images\glyphicons-halflings-white.png" />
     <Content Include="Content\images\glyphicons-halflings.png" />
     <Content Include="Global.asax" />
@@ -102,6 +107,8 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\flipcounter.js" />
+    <Content Include="Scripts\flipcounter.min.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\_references.js" />
