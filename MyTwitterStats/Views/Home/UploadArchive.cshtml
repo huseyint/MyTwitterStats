@@ -34,7 +34,7 @@
 			<h2>Tweets per day</h2>
 			<p>@Model.TweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
 			<h2>Most used client <small>(@Model.MostUsedClientCount times)</small></h2>
-			<p>@Model.MostUsedClientName</p>
+			<p><a href="@Model.MostUsedClientAddress">@Model.MostUsedClientName</a></p>
 		</section>
 		<section id="retweets">
 			<div class="page-header">
@@ -79,10 +79,16 @@
 			</div>
 			<h2>Most tweeted day of week <small>(@Model.MostTweetedDayOfWeekCount times)</small></h2>
 			<p>@Model.MostTweetedDayOfWeekName</p>
+			@if (Model.MostTweetedDay.HasValue)
+			{
 			<h2>Most tweeted day <small>(@Model.MostTweetedDayCount times)</small></h2>
-			<p>@Model.MostTweetedDay.ToString("D", CultureInfo.InvariantCulture)</p>
+			<p>@Model.MostTweetedDay.Value.ToString("D", CultureInfo.InvariantCulture)</p>
+			}
+			@if (Model.LeastTweetedDayOfWeekName.HasValue)
+			{
 			<h2>Least tweeted day <small>(@Model.LeastTweetedDayCount times)</small></h2>
-			<p>@Model.LeastTweetedDayName</p>
+			<p>@Model.LeastTweetedDayOfWeekName.Value</p>
+			}
 			<h2>Most tweeted hour <small>(@Model.MostTweetedHourCount times)</small></h2>
 			<p>@Model.MostTweetedHour.ToString("0#"):00</p>
 			<h2>Least tweeted hour <small>(@Model.LeastTweetedHourCount times)</small></h2>

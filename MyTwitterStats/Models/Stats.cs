@@ -30,6 +30,8 @@ namespace MyTwitterStats.Models
 
 		public string MostUsedClientName { get; set; }
 
+		public Uri MostUsedClientAddress { get; set; }
+
 		public int MostUsedClientCount { get; set; }
 
 		public int RetweetCount { get; set; }
@@ -64,15 +66,15 @@ namespace MyTwitterStats.Models
 
 		public string ShortestHastag { get; set; }
 
-		public DayOfWeek MostTweetedDayOfWeekName { get; set; }
+		public DayOfWeek? MostTweetedDayOfWeekName { get; set; }
 
 		public int MostTweetedDayOfWeekCount { get; set; }
 
-		public DateTime MostTweetedDay { get; set; }
+		public DateTime? MostTweetedDay { get; set; }
 
 		public int MostTweetedDayCount { get; set; }
 
-		public DayOfWeek LeastTweetedDayName { get; set; }
+		public DayOfWeek? LeastTweetedDayOfWeekName { get; set; }
 
 		public int LeastTweetedDayCount { get; set; }
 

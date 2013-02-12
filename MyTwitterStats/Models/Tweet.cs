@@ -9,6 +9,10 @@ namespace MyTwitterStats.Models
 	{
 		private static readonly Regex _sourceNameRegex = new Regex(">([^<]*)</a>");
 
+		private static readonly Regex _sourceAddressRegex = new Regex(@"^<a href=""(https?://[a-z\d\.-]*/?)"" rel=""nofollow"">[^<]*</a>$", RegexOptions.IgnoreCase);
+
+		private static readonly Uri _twitterWebAddress = new Uri("https://twitter.com/");
+
 		public string Text { get; set; }
 
 		public long Id { get; set; }
@@ -42,6 +46,21 @@ namespace MyTwitterStats.Models
 				var match = _sourceNameRegex.Match(Source);
 
 				return match.Success ? match.Groups[1].Value : string.Empty;
+			}
+		}
+
+		public Uri SourceAddress
+		{
+			get
+			{
+				if ("web".Equals(Source))
+				{
+					return _twitterWebAddress;
+				}
+
+				var match = _sourceAddressRegex.Match(Source);
+
+				return match.Success ? new Uri(match.Groups[1].Value) : _twitterWebAddress;
 			}
 		}
 	}

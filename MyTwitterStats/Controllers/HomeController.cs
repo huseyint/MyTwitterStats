@@ -56,6 +56,11 @@ namespace MyTwitterStats.Controllers
 
 			var stats = new Stats();
 
+			if (allTweets.Length == 0)
+			{
+				return stats;
+			}
+
 			stats.OwnerAccount = allTweets.First().User;
 
 			// A. GENERAL
@@ -63,22 +68,34 @@ namespace MyTwitterStats.Controllers
 			stats.TotalTweetCount = allTweets.Length;
 
 			// A.2. Tweets per day
-			stats.FirstTweet = allTweets.First(t => t.RetweetedStatus == null);
-			stats.LastTweet = allTweets.Last(t => t.RetweetedStatus == null);
-			stats.LifeSpan = stats.LastTweet.CreatedAt - stats.FirstTweet.CreatedAt;
-			stats.TweetsPerDay = stats.TotalTweetCount/stats.LifeSpan.TotalDays;
+			stats.FirstTweet = allTweets.FirstOrDefault(t => t.RetweetedStatus == null);
+			stats.LastTweet = allTweets.LastOrDefault(t => t.RetweetedStatus == null);
+
+			if (stats.FirstTweet != null && stats.LastTweet != null)
+			{
+				stats.LifeSpan = stats.LastTweet.CreatedAt - stats.FirstTweet.CreatedAt;
+				stats.TweetsPerDay = stats.TotalTweetCount / stats.LifeSpan.TotalDays;
+			}
 
 			// A.3. Clients used
-			var mostUsedClient = allTweets.GroupBy(t => t.SourceName).OrderByDescending(g => g.Count()).First();
-			stats.MostUsedClientName = mostUsedClient.Key;
-			stats.MostUsedClientCount = mostUsedClient.Count();
+			var mostUsedClient = allTweets.GroupBy(t => t.SourceName).OrderByDescending(g => g.Count()).FirstOrDefault();
+
+			if (mostUsedClient != null && mostUsedClient.Any())
+			{
+				stats.MostUsedClientName = mostUsedClient.Key;
+				stats.MostUsedClientAddress = mostUsedClient.First().SourceAddress;
+				stats.MostUsedClientCount = mostUsedClient.Count();
+			}
 
 			// B. RETWEETS
 			// B.1. Total retweets
 			stats.RetweetCount = allTweets.Count(t => t.RetweetedStatus != null);
 
 			// B.2. Retweets per day
-			stats.RetweetsPerDay = stats.RetweetCount/stats.LifeSpan.TotalDays;
+			if (stats.LifeSpan.TotalDays > 0d)
+			{
+				stats.RetweetsPerDay = stats.RetweetCount / stats.LifeSpan.TotalDays;
+			}
 
 			// B.3. Most retweeted account
 			var retweetedTweets = allTweets.Where(t => t.RetweetedStatus != null).ToArray();
@@ -87,16 +104,25 @@ namespace MyTwitterStats.Controllers
 				.Select(t => t.RetweetedStatus)
 				.GroupBy(rts => rts.User.ScreenName)
 				.OrderByDescending(g => g.Count())
-				.First();
-			stats.MostRetweetedAccountName = mostRetweetedAccount.Key;
-			stats.MostRetweetedAccountCount = mostRetweetedAccount.Count();
+				.FirstOrDefault();
+
+			if (mostRetweetedAccount != null)
+			{
+				stats.MostRetweetedAccountName = mostRetweetedAccount.Key;
+				stats.MostRetweetedAccountCount = mostRetweetedAccount.Count();
+			}
 
 			// B.4. Fastest retweet
 			var fastestRetweet = retweetedTweets
-				.Select(t => new {Tweet = t, Delta = t.CreatedAt - t.RetweetedStatus.CreatedAt})
-				.OrderBy(x => x.Delta).First();
-			stats.FastestRetweet = fastestRetweet.Tweet;
-			stats.FastestRetweetSpan = fastestRetweet.Delta;
+				.Select(t => new { Tweet = t, Delta = t.CreatedAt - t.RetweetedStatus.CreatedAt })
+				.OrderBy(x => x.Delta)
+				.FirstOrDefault();
+
+			if (fastestRetweet != null)
+			{
+				stats.FastestRetweet = fastestRetweet.Tweet;
+				stats.FastestRetweetSpan = fastestRetweet.Delta;
+			}
 
 			// C. MENTIONS & REPLIES
 			// C.1. Mention count
@@ -108,56 +134,109 @@ namespace MyTwitterStats.Controllers
 			stats.ReplyCount = replies.Length;
 
 			// C.3. Most mentioned account
-			var mostMentionedAccount = mentions.GroupBy(um => um.ScreenName).OrderByDescending(g => g.Count()).First();
-			stats.MostMentionedAccountName = mostMentionedAccount.Key;
-			stats.MostMentionedAccountCount = mostMentionedAccount.Count();
+			var mostMentionedAccount = mentions
+				.GroupBy(um => um.ScreenName)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
+			if (mostMentionedAccount != null)
+			{
+				stats.MostMentionedAccountName = mostMentionedAccount.Key;
+				stats.MostMentionedAccountCount = mostMentionedAccount.Count();
+			}
 
 			// C.4. Most replied account
-			var mostRepliedAccount = replies.GroupBy(um => um.ScreenName).OrderByDescending(g => g.Count()).First();
-			stats.MostRepliedAccountName = mostRepliedAccount.Key;
-			stats.MostRepliedAccountCount = mostRepliedAccount.Count();
+			var mostRepliedAccount = replies
+				.GroupBy(um => um.ScreenName)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
+			if (mostRepliedAccount != null)
+			{
+				stats.MostRepliedAccountName = mostRepliedAccount.Key;
+				stats.MostRepliedAccountCount = mostRepliedAccount.Count();
+			}
 
 			// D. HASHTAGS
 			// D.1. Most used hashtag
 			var hashtags = allTweets.SelectMany(t => t.Entities.Hashtags).ToArray();
-			var mostUsedHashtag = hashtags.GroupBy(ht => ht.Text).OrderByDescending(g => g.Count()).First();
-			stats.MostUsedHashtagText = mostUsedHashtag.Key;
-			stats.MostUsedHashtagCount = mostUsedHashtag.Count();
+			var mostUsedHashtag = hashtags
+				.GroupBy(ht => ht.Text)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
+			if (mostUsedHashtag != null)
+			{
+				stats.MostUsedHashtagText = mostUsedHashtag.Key;
+				stats.MostUsedHashtagCount = mostUsedHashtag.Count();
+			}
 
 			// D.2. Longest hashtag
-			var hashtagsSortedByLength = hashtags.Select(ht => ht.Text).OrderBy(ht => ht.Length);
-			stats.LongestHastag = hashtagsSortedByLength.Last();
+			var hashtagsSortedByLength = hashtags
+				.Select(ht => ht.Text)
+				.OrderBy(ht => ht.Length);
+			stats.LongestHastag = hashtagsSortedByLength.LastOrDefault();
 
 			// D.3. Shortest hashtag
-			stats.ShortestHastag = hashtagsSortedByLength.First();
+			stats.ShortestHastag = hashtagsSortedByLength.FirstOrDefault();
 
 			// E. DATE & TIME
 			// E.1. Most tweeted day of week
-			var tweetsGroupedByDay = allTweets.Select(t => t.CreatedAt.DayOfWeek).GroupBy(d => d).OrderBy(g => g.Count()).ToArray();
-			var mostTweetedDayOfWeek = tweetsGroupedByDay.Last();
-			stats.MostTweetedDayOfWeekName = mostTweetedDayOfWeek.Key;
-			stats.MostTweetedDayOfWeekCount = mostTweetedDayOfWeek.Count();
+			var tweetsGroupedByDay = allTweets
+				.Select(t => t.CreatedAt.DayOfWeek)
+				.GroupBy(d => d)
+				.OrderBy(g => g.Count())
+				.ToArray();
+			var mostTweetedDayOfWeek = tweetsGroupedByDay.LastOrDefault();
+
+			if (mostTweetedDayOfWeek != null)
+			{
+				stats.MostTweetedDayOfWeekName = mostTweetedDayOfWeek.Key;
+				stats.MostTweetedDayOfWeekCount = mostTweetedDayOfWeek.Count();
+			}
 
 			// E.2. Most tweeted day
-			var mostTweetedDay = allTweets.GroupBy(t => t.CreatedAt.Date).OrderByDescending(g => g.Count()).First();
-			stats.MostTweetedDay = mostTweetedDay.Key;
-			stats.MostTweetedDayCount = mostTweetedDay.Count();
+			var mostTweetedDay = allTweets
+				.GroupBy(t => t.CreatedAt.Date)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+			
+			if (mostTweetedDay != null)
+			{
+				stats.MostTweetedDay = mostTweetedDay.Key;
+				stats.MostTweetedDayCount = mostTweetedDay.Count();
+			}
 
 			// E.3. Least tweeted day
-			var leastTweetedDay = tweetsGroupedByDay.First();
-			stats.LeastTweetedDayName = leastTweetedDay.Key;
-			stats.LeastTweetedDayCount = leastTweetedDay.Count();
+			var leastTweetedDay = tweetsGroupedByDay.FirstOrDefault();
+			
+			if (leastTweetedDay != null)
+			{
+				stats.LeastTweetedDayOfWeekName = leastTweetedDay.Key;
+				stats.LeastTweetedDayCount = leastTweetedDay.Count();
+			}
 
 			// E.4. Most tweeted hour
-			var tweetsGroupedByHour = allTweets.Select(t => t.CreatedAt.Hour).GroupBy(d => d).OrderBy(g => g.Count());
-			var mostTweetedHour = tweetsGroupedByHour.Last();
-			stats.MostTweetedHour = mostTweetedHour.Key;
-			stats.MostTweetedHourCount = mostTweetedHour.Count();
+			var tweetsGroupedByHour = allTweets
+				.Select(t => t.CreatedAt.Hour)
+				.GroupBy(d => d)
+				.OrderBy(g => g.Count());
+			var mostTweetedHour = tweetsGroupedByHour.LastOrDefault();
+			
+			if (mostTweetedHour != null)
+			{
+				stats.MostTweetedHour = mostTweetedHour.Key;
+				stats.MostTweetedHourCount = mostTweetedHour.Count();
+			}
 
 			// E.5. Least tweeted hour
-			var leastTweetedHour = tweetsGroupedByHour.First();
-			stats.LeastTweetedHour = leastTweetedHour.Key;
-			stats.LeastTweetedHourCount = leastTweetedHour.Count();
+			var leastTweetedHour = tweetsGroupedByHour.FirstOrDefault();
+			
+			if (leastTweetedHour != null)
+			{
+				stats.LeastTweetedHour = leastTweetedHour.Key;
+				stats.LeastTweetedHourCount = leastTweetedHour.Count();
+			}
 
 			// E.6. Longest time not tweeted
 			var previousTweet = stats.FirstTweet;
@@ -189,24 +268,42 @@ namespace MyTwitterStats.Controllers
 			stats.TotalCharCount = allTweets.Sum(t => t.Text.Length);
 
 			// F.2. Average char count
-			stats.AverageCharCount = stats.TotalCharCount/allTweets.Length;
+			if (allTweets.Length > 0)
+			{
+				stats.AverageCharCount = stats.TotalCharCount / allTweets.Length;
+			}
 
 			// F.3. Total word count
-			var allWords =
-				allTweets.SelectMany(t => t.Text.Split(new[] {' ', '\t', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries))
-				         .ToArray();
+			var allWords = allTweets
+				.SelectMany(t => t.Text.Split(new[] {' ', '\t', '\r', '\n'}, StringSplitOptions.RemoveEmptyEntries))
+				.ToArray();
 			stats.TotalWordCount = allWords.Count();
 
 			// F.4. Average word count
-			stats.AverageWordCount = stats.TotalWordCount/allTweets.Length;
+			if (allTweets.Length > 0)
+			{
+				stats.AverageWordCount = stats.TotalWordCount / allTweets.Length;
+			}
 
 			// F.5. Most used word
-			var mostUsedWord = allWords.Where(w => !"RT".Equals(w)).GroupBy(w => w).OrderByDescending(g => g.Count()).First();
-			stats.MostUsedWord = mostUsedWord.Key;
-			stats.MostUsedWordCount = mostUsedWord.Count();
+			var mostUsedWord = allWords
+				.Where(w => !"RT".Equals(w))
+				.GroupBy(w => w).OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+			
+			if (mostUsedWord != null)
+			{
+				stats.MostUsedWord = mostUsedWord.Key;
+				stats.MostUsedWordCount = mostUsedWord.Count();
+			}
 
 			// F.6. Duplicate tweets
-			var mostDuplicatedTweet = allTweets.GroupBy(t => t.Text).Where(g => g.Count() > 1).OrderByDescending(g => g.Count()).FirstOrDefault();
+			var mostDuplicatedTweet = allTweets
+				.GroupBy(t => t.Text)
+				.Where(g => g.Count() > 1)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
 			if (mostDuplicatedTweet != null)
 			{
 				stats.MostDuplicatedTweet = mostDuplicatedTweet.Key;
@@ -219,15 +316,30 @@ namespace MyTwitterStats.Controllers
 			stats.LinkCount = allUrls.Count();
 
 			// G.2. Most linked URL
-			var mostLinkedUrl = allUrls.Select(u => u.ExpandedUrl).GroupBy(u => u).OrderByDescending(g => g.Count()).First();
-			stats.MostLinkedUrl = mostLinkedUrl.Key;
-			stats.MostLinkedUrlCount = mostLinkedUrl.Count();
+			var mostLinkedUrl = allUrls
+				.Select(u => u.ExpandedUrl)
+				.GroupBy(u => u)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
+			if (mostLinkedUrl != null)
+			{
+				stats.MostLinkedUrl = mostLinkedUrl.Key;
+				stats.MostLinkedUrlCount = mostLinkedUrl.Count();
+			}
 
 			// G.3. Most linked domain
-			var mostLinkedDomain =
-				allUrls.Select(u => new Uri(u.ExpandedUrl)).GroupBy(u => u.Host).OrderByDescending(g => g.Count()).First();
-			stats.MostLinkedDomain = mostLinkedDomain.Key;
-			stats.MostLinkedDomainCount = mostLinkedDomain.Count();
+			var mostLinkedDomain = allUrls
+				.Select(u => new Uri(u.ExpandedUrl))
+				.GroupBy(u => u.Host)
+				.OrderByDescending(g => g.Count())
+				.FirstOrDefault();
+
+			if (mostLinkedDomain != null)
+			{
+				stats.MostLinkedDomain = mostLinkedDomain.Key;
+				stats.MostLinkedDomainCount = mostLinkedDomain.Count();
+			}
 
 			// H. 3RD PARTY
 			foreach (var tweet in allTweets)
