@@ -7,6 +7,13 @@ namespace MyTwitterStats.Json
 {
 	public class TwitterDateConverter : DateTimeConverterBase
 	{
+		private readonly int _addMinutes;
+
+		public TwitterDateConverter(int timeZoneOffset = 0)
+		{
+			_addMinutes = timeZoneOffset * -1;
+		}
+
 		public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
 		{
 		}
@@ -16,6 +23,11 @@ namespace MyTwitterStats.Json
 			var s = (string)reader.Value;
 
 			var dateTime = DateTime.ParseExact(s, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+
+			if (_addMinutes != 0)
+			{
+				dateTime = dateTime.AddMinutes(_addMinutes);
+			}
 
 			return dateTime;
 		}
