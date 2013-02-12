@@ -20,7 +20,7 @@ namespace MyTwitterStats.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult UploadArchive(HttpPostedFileBase file)
+		public ActionResult UploadArchive(HttpPostedFileBase file, int timeZoneOffset)
 		{
 			var settings = new JsonSerializerSettings { ContractResolver = new UnderscoreMappingResolver() };
 			settings.Converters.Add(new TwitterDateConverter());
@@ -45,13 +45,25 @@ namespace MyTwitterStats.Controllers
 				}
 			}
 
-			var stats = GenerateStats(tweetsRaw);
+			var stats = GenerateStats(tweetsRaw, timeZoneOffset);
 
 			return View(stats);
 		}
 
-		private static Stats GenerateStats(List<Tweet> tweetsRaw)
+		private static Stats GenerateStats(List<Tweet> tweetsRaw, int timeZoneOffset)
 		{
+			timeZoneOffset *= -1;
+
+			foreach (var tweet in tweetsRaw)
+			{
+				tweet.CreatedAt = tweet.CreatedAt.AddMinutes(timeZoneOffset);
+				
+				if (tweet.RetweetedStatus != null)
+				{
+					tweet.RetweetedStatus.CreatedAt = tweet.RetweetedStatus.CreatedAt.AddMinutes(timeZoneOffset);
+				}
+			}
+
 			var allTweets = tweetsRaw.OrderBy(t => t.CreatedAt).ToArray();
 
 			var stats = new Stats();

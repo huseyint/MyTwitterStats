@@ -15,7 +15,7 @@ namespace MyTwitterStats.Json
 		{
 			var s = (string)reader.Value;
 
-			var dateTime = DateTime.ParseExact(s, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture);
+			var dateTime = DateTime.ParseExact(s, "ddd MMM dd HH:mm:ss zzz yyyy", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
 
 			return dateTime;
 		}

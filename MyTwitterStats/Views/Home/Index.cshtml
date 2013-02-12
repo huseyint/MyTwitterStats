@@ -15,5 +15,16 @@
 		</div>
 	</div>
 
+	<input type="hidden" name="timeZoneOffset" id="timeZoneOffset" />
 	<input type="submit" class="btn btn-primary" value="Upload" style="margin-left: 10px;" />
+
+	<script type="text/javascript">
+		//<![CDATA[
+
+		$(function () {
+			$('#timeZoneOffset').val(new Date().getTimezoneOffset()).change();
+		});
+
+		//]]>
+	</script>
 </form>
