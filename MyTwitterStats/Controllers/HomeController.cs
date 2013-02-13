@@ -46,8 +46,50 @@ namespace MyTwitterStats.Controllers
 			}
 
 			var stats = GenerateStats(tweetsRaw);
+			var id = SaveStats(stats);
 
-			return View(stats);
+			return RedirectToAction("ViewStats", new { Id = id });
+		}
+
+		private string SaveStats(Stats stats)
+		{
+			var id = Guid.NewGuid().ToString("N");
+
+			var dirPath = Path.Combine(GetSavePath(), id.Substring(0, 2));
+			Directory.CreateDirectory(dirPath);
+
+			var path = Path.Combine(dirPath, id);
+
+			using (var stream = System.IO.File.OpenWrite(path))
+			using (var zipStream = new GZipStream(stream, CompressionMode.Compress))
+			using (var streamWriter = new StreamWriter(zipStream))
+			{
+				var jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
+				jsonSerializer.Serialize(streamWriter, stats);
+			}
+
+			return id;
+		}
+
+		public ActionResult ViewStats(string id)
+		{
+			var dirPath = Path.Combine(GetSavePath(), id.Substring(0, 2));
+			var path = Path.Combine(dirPath, id);
+
+			if (!System.IO.File.Exists(path))
+			{
+				return HttpNotFound("The specified stats couldn't be found.");
+			}
+
+			using (var stream = System.IO.File.OpenRead(path))
+			using (var zipStream = new GZipStream(stream, CompressionMode.Decompress))
+			using (var reader = new StreamReader(zipStream))
+			{
+				var jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
+				var stats = jsonSerializer.Deserialize<Stats>(new JsonTextReader(reader));
+
+				return View(stats);
+			}
 		}
 
 		private static Stats GenerateStats(List<Tweet> tweetsRaw)
@@ -260,8 +302,8 @@ namespace MyTwitterStats.Controllers
 			}
 
 			stats.LongestTimeNotTweeted = longestTime;
-			stats.NotTweetedStartTweet = startTweet;
-			stats.NotTweetedEndTweet = endTweet;
+			stats.NotTweetedStartDate = startTweet.CreatedAt;
+			stats.NotTweetedEndDate = endTweet.CreatedAt;
 
 			// F. TEXT ANALYSYS
 			// F.1. Total char count
@@ -353,6 +395,11 @@ namespace MyTwitterStats.Controllers
 			}
 
 			return stats;
+		}
+
+		private string GetSavePath()
+		{
+			return Server.MapPath("~/App_Data/");
 		}
 	}
 }

@@ -88,9 +88,9 @@ namespace MyTwitterStats.Models
 
 		public TimeSpan LongestTimeNotTweeted { get; set; }
 
-		public Tweet NotTweetedStartTweet { get; set; }
+		public DateTime NotTweetedStartDate { get; set; }
 
-		public Tweet NotTweetedEndTweet { get; set; }
+		public DateTime NotTweetedEndDate { get; set; }
 
 		public int TotalCharCount { get; set; }
 

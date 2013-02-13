@@ -124,8 +124,8 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\UploadArchive.cshtml" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
+    <Content Include="Views\Home\ViewStats.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -93,7 +93,7 @@
 			<p>@Model.MostTweetedHour.ToString("0#"):00</p>
 			<h2>Least tweeted hour <small>(@Model.LeastTweetedHourCount times)</small></h2>
 			<p>@Model.LeastTweetedHour.ToString("0#"):00</p>
-			<h2>Longest time not tweeted <small>(between @Model.NotTweetedStartTweet.CreatedAt.ToString("d", CultureInfo.InvariantCulture) &amp; @Model.NotTweetedEndTweet.CreatedAt.ToString("d", CultureInfo.InvariantCulture))</small></h2>
+			<h2>Longest time not tweeted <small>(between @Model.NotTweetedStartDate.ToString("d", CultureInfo.InvariantCulture) and @Model.NotTweetedEndDate.ToString("d", CultureInfo.InvariantCulture))</small></h2>
 			<p>@Model.LongestTimeNotTweeted.Days days</p>
 		</section>
 		<section id="textAnalysys">
