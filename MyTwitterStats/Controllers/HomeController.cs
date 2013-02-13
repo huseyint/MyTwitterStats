@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
+using Amazon.S3.Model;
 using MyTwitterStats.Json;
 using MyTwitterStats.Models;
 using Newtonsoft.Json;
@@ -14,6 +15,9 @@ namespace MyTwitterStats.Controllers
 {
 	public class HomeController : Controller
 	{
+		private const string AwsAccessKey = "AKIAIS55CGM5PDAFF7QA";
+		private const string AwsSecretAccessKey = "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";
+
 		public ActionResult Index()
 		{
 			return View();
@@ -55,17 +59,25 @@ namespace MyTwitterStats.Controllers
 		{
 			var id = Guid.NewGuid().ToString("N");
 
-			var dirPath = Path.Combine(GetSavePath(), id.Substring(0, 2));
-			Directory.CreateDirectory(dirPath);
+			var stream = new MemoryStream();
 
-			var path = Path.Combine(dirPath, id);
-
-			using (var stream = System.IO.File.OpenWrite(path))
-			using (var zipStream = new GZipStream(stream, CompressionMode.Compress))
+			using (var zipStream = new GZipStream(stream, CompressionMode.Compress, true))
 			using (var streamWriter = new StreamWriter(zipStream))
 			{
 				var jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
 				jsonSerializer.Serialize(streamWriter, stats);
+			}
+
+			stream.Position = 0;
+
+			using (stream)
+			using (var client = Amazon.AWSClientFactory.CreateAmazonS3Client(AwsAccessKey, AwsSecretAccessKey))
+			{
+				var request = new PutObjectRequest();
+				request.WithBucketName("MyTwitterStats")
+					.WithCannedACL(S3CannedACL.PublicRead)
+					.WithKey(id + ".json.gz").InputStream = stream;
+				client.PutObject(request);
 			}
 
 			return id;
@@ -73,22 +85,22 @@ namespace MyTwitterStats.Controllers
 
 		public ActionResult ViewStats(string id)
 		{
-			var dirPath = Path.Combine(GetSavePath(), id.Substring(0, 2));
-			var path = Path.Combine(dirPath, id);
-
-			if (!System.IO.File.Exists(path))
+			using (var client = Amazon.AWSClientFactory.CreateAmazonS3Client(AwsAccessKey, AwsSecretAccessKey))
 			{
-				return HttpNotFound("The specified stats couldn't be found.");
-			}
+				var request = new GetObjectRequest();
+				request.WithBucketName("MyTwitterStats")
+				       .WithKey(id + ".json.gz");
 
-			using (var stream = System.IO.File.OpenRead(path))
-			using (var zipStream = new GZipStream(stream, CompressionMode.Decompress))
-			using (var reader = new StreamReader(zipStream))
-			{
-				var jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
-				var stats = jsonSerializer.Deserialize<Stats>(new JsonTextReader(reader));
+				using (var response = client.GetObject(request))
+				using (var stream = response.ResponseStream)
+				using (var zipStream = new GZipStream(stream, CompressionMode.Decompress))
+				using (var reader = new StreamReader(zipStream))
+				{
+					var jsonSerializer = JsonSerializer.Create(new JsonSerializerSettings());
+					var stats = jsonSerializer.Deserialize<Stats>(new JsonTextReader(reader));
 
-				return View(stats);
+					return View(stats);
+				}
 			}
 		}
 
@@ -395,11 +407,6 @@ namespace MyTwitterStats.Controllers
 			}
 
 			return stats;
-		}
-
-		private string GetSavePath()
-		{
-			return Server.MapPath("~/App_Data/");
 		}
 	}
 }
