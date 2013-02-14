@@ -53,7 +53,7 @@ namespace MyTwitterStats.Controllers
 			var stats = Stats.GenerateStats(tweetsRaw);
 			var id = SaveStats(stats);
 
-			return RedirectToAction("ViewStats", new { Id = id });
+			return RedirectToAction("viewstats", new { Id = id });
 		}
 
 		private string SaveStats(Stats stats)
@@ -115,6 +115,11 @@ namespace MyTwitterStats.Controllers
 					return View(stats);
 				}
 			}
+		}
+
+		public ActionResult About()
+		{
+			return View();
 		}
 	}
 }

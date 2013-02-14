@@ -1,10 +1,16 @@
 ﻿@{
-	ViewBag.Title = "Index";
+	ViewBag.Title = "My Twitter Stats";
+	ViewBag.ActiveTab = "Home";
 }
-<h1 style="padding-top: 60px;">Upload your twitter archive</h1>
+<h1 style="padding-top: 60px;">1. Request your twitter archive</h1>
+<p>Go to your <a href="https://twitter.com/settings/account" target="_blank">twitter settings</a>, scroll down to bottom and click <strong>Request your archive</strong> button.</p>
+<img src="/Content/images/RequestArchive.png" />
+<h1 style="padding-top: 30px;">2. Check your mail for archive download link</h1>
+<p>You should have an email coming from twitter that contains a link to your archive, download it.</p>
+<h1 style="padding-top: 30px;">3. Upload your twitter archive</h1>
 <p>Upload the <strong>tweets.zip</strong> file you have downloaded.</p>
-	
-<form action="/Home/UploadArchive" method="post" enctype="multipart/form-data">
+
+<form action="/uploadarchive" method="post" enctype="multipart/form-data">
 	<div class="fileupload fileupload-new" data-provides="fileupload" style="float: left;">
 		<div class="input-append">
 			<div class="uneditable-input span3">
