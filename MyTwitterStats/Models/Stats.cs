@@ -67,6 +67,10 @@ namespace MyTwitterStats.Models
 
 		public string ShortestHastag { get; set; }
 
+		public MonthTweetCount[] MonthTweetCounts { get; set; }
+
+		public MonthTweetCount MostTweetedMonth { get; set; }
+
 		public DayOfWeek? MostTweetedDayOfWeekName { get; set; }
 
 		public int MostTweetedDayOfWeekCount { get; set; }
@@ -287,7 +291,16 @@ namespace MyTwitterStats.Models
 				stats.LeastTweetedDayCount = leastTweetedDay.Count();
 			}
 
-			// E.4. Most tweeted hour
+			// E.5. Most tweeted month
+			stats.MonthTweetCounts = allTweets
+				.Select(t => Tuple.Create(t.CreatedAt.Year, t.CreatedAt.Month))
+				.GroupBy(t => t)
+				.Select(g => new MonthTweetCount { Year = g.Key.Item1, Month = g.Key.Item2, Count = g.Count() })
+				.ToArray();
+
+			stats.MostTweetedMonth = stats.MonthTweetCounts.OrderByDescending(mtc => mtc.Count).FirstOrDefault();
+
+			// E.5. Most tweeted hour
 			var tweetsGroupedByHour = allTweets
 				.Select(t => t.CreatedAt.Hour)
 				.GroupBy(d => d)

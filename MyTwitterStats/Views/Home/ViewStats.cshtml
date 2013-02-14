@@ -77,6 +77,8 @@
 			<div class="page-header">
 				<h1>Date &amp; Time</h1>
 			</div>
+			<h2>Tweets per month</h2>
+			<div id="chartTweetsPerMonth" style="width: 900px; height: 400px;"></div>
 			<h2>Most tweeted day of week <small>(@Model.MostTweetedDayOfWeekCount times)</small></h2>
 			<p>@Model.MostTweetedDayOfWeekName</p>
 			@if (Model.MostTweetedDay.HasValue)
@@ -86,9 +88,11 @@
 			}
 			@if (Model.LeastTweetedDayOfWeekName.HasValue)
 			{
-			<h2>Least tweeted day <small>(@Model.LeastTweetedDayCount times)</small></h2>
+			<h2>Least tweeted day of week <small>(@Model.LeastTweetedDayCount times)</small></h2>
 			<p>@Model.LeastTweetedDayOfWeekName.Value</p>
 			}
+			<h2>Most tweeted month <small>(@Model.MostTweetedMonth.Count times)</small></h2>
+			<p>@Model.MostTweetedMonth.MonthName @Model.MostTweetedMonth.Year</p>
 			<h2>Most tweeted hour <small>(@Model.MostTweetedHourCount times)</small></h2>
 			<p>@Model.MostTweetedHour.ToString("0#"):00</p>
 			<h2>Least tweeted hour <small>(@Model.LeastTweetedHourCount times)</small></h2>
@@ -153,7 +157,7 @@
 </div>
 
 @*<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>*@
-
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <script type="text/javascript">
 //<![CDATA[
@@ -203,6 +207,27 @@ $(function() {
 	
 	var runkeeper = new flipCounter('counter-runkeeper', {});
 	runkeeper.incrementTo(@Model.ThirdPartySourceCounts["RunKeeper"], time, pace);
+	
+	setTimeout(function() {
+		google.load('visualization', '1', { 'callback': function() {
+			var data = google.visualization.arrayToDataTable([
+				['Year', 'Tweets' ],
+@for (var i = 0; i < Model.MonthTweetCounts.Length; ++i)
+{
+	var month = Model.MonthTweetCounts[i];
+<text>['@month.MonthName @month.Year', @month.Count]</text>if (i < Model.MonthTweetCounts.Length - 1) {<text>,</text>}
+}]);
+
+			var chart = new google.visualization.ColumnChart(document.getElementById('chartTweetsPerMonth'));
+			var options = {
+				width:900, 
+				height:400,
+				chartArea:{left:50,top:10,width:"90%",height:"80%"},
+				legend: {position: 'none'}
+			};
+			chart.draw(data, options);
+		}, 'packages': ['corechart'] });
+	}, 100);
 });
 
 //]]>

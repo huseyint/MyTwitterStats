@@ -80,6 +80,7 @@
     <Compile Include="Models\Hashtag.cs" />
     <Compile Include="Models\Media.cs" />
     <Compile Include="Models\MediaSize.cs" />
+    <Compile Include="Models\MonthTweetCount.cs" />
     <Compile Include="Models\RetweetedStatus.cs" />
     <Compile Include="Models\Stats.cs" />
     <Compile Include="Models\Tweet.cs" />
