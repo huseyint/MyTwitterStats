@@ -32,9 +32,9 @@
 			<h2>Tweeting for days</h2>
 			<div id="counter-lifeSpan" class="flip-counter"></div><div class="clearfix"></div>
 			<h2>Tweets per day</h2>
-			<p>@Model.TweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
+			<p class="lead text-info">@Model.TweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
 			<h2>Most used client <small>(@Model.MostUsedClientCount times)</small></h2>
-			<p><a href="@Model.MostUsedClientAddress">@Model.MostUsedClientName</a></p>
+			<p class="lead text-info"><a href="@Model.MostUsedClientAddress">@Model.MostUsedClientName</a></p>
 		</section>
 		<section id="retweets">
 			<div class="page-header">
@@ -43,9 +43,9 @@
 			<h2>Retweet count</h2>
 			<div id="counter-retweetCount" class="flip-counter"></div><div class="clearfix"></div>
 			<h2>Retweets per day</h2>
-			<p>@Model.RetweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
+			<p class="lead text-info">@Model.RetweetsPerDay.ToString("0.##", CultureInfo.InvariantCulture)</p>
 			<h2>Most retweeted account <small>(@Model.MostRetweetedAccountCount times)</small></h2>
-			<p>@Model.MostRetweetedAccountName</p>
+			<p class="lead text-info">@Html.TwitterAccountLink(Model.MostRetweetedAccountName)</p>
 			<h2>Fastest retweet <small>(in @Model.FastestRetweetSpan.Seconds seconds)</small></h2>
 			@Html.Tweet(Model.FastestRetweet)
 		</section>
@@ -58,20 +58,20 @@
 			<h2>Reply count</h2>
 			<div id="counter-replyCount" class="flip-counter"></div><div class="clearfix"></div>
 			<h2>Most mentioned account <small>(@Model.MostMentionedAccountCount times)</small></h2>
-			<p>@Model.MostMentionedAccountName</p>
+			<p class="lead text-info">@Html.TwitterAccountLink(Model.MostMentionedAccountName)</p>
 			<h2>Most replied account <small>(@Model.MostRepliedAccountCount times)</small></h2>
-			<p>@Model.MostRepliedAccountName</p>
+			<p class="lead text-info">@Html.TwitterAccountLink(Model.MostRepliedAccountName)</p>
 		</section>
 		<section id="hashtags">
 			<div class="page-header">
 				<h1>Hashtags</h1>
 			</div>
 			<h2>Most used hashtag <small>(@Model.MostUsedHashtagCount times)</small></h2>
-			<p>#@Model.MostUsedHashtagText</p>
+			<p class="lead text-info">@Html.TwitterHashSearchLink(Model.MostUsedHashtagText)</p>
 			<h2>Longest hashtag <small>(@Model.LongestHastag.Length chars)</small></h2>
-			<p>#@Model.LongestHastag</p>
+			<p class="lead text-info">@Html.TwitterHashSearchLink(Model.LongestHastag)</p>
 			<h2>Shortest hashtag <small>(@Model.ShortestHastag.Length chars)</small></h2>
-			<p>#@Model.ShortestHastag</p>
+			<p class="lead text-info">@Html.TwitterHashSearchLink(Model.ShortestHastag)</p>
 		</section>
 		<section id="dateTime">
 			<div class="page-header">
@@ -80,25 +80,25 @@
 			<h2>Tweets per month</h2>
 			<div id="chartTweetsPerMonth" style="width: 900px; height: 400px;"></div>
 			<h2>Most tweeted day of week <small>(@Model.MostTweetedDayOfWeekCount times)</small></h2>
-			<p>@Model.MostTweetedDayOfWeekName</p>
+			<p class="lead text-info">@Model.MostTweetedDayOfWeekName</p>
 			@if (Model.MostTweetedDay.HasValue)
 			{
 			<h2>Most tweeted day <small>(@Model.MostTweetedDayCount times)</small></h2>
-			<p>@Model.MostTweetedDay.Value.ToString("D", CultureInfo.InvariantCulture)</p>
+			<p class="lead text-info">@Model.MostTweetedDay.Value.ToString("D", CultureInfo.InvariantCulture)</p>
 			}
 			@if (Model.LeastTweetedDayOfWeekName.HasValue)
 			{
 			<h2>Least tweeted day of week <small>(@Model.LeastTweetedDayCount times)</small></h2>
-			<p>@Model.LeastTweetedDayOfWeekName.Value</p>
+			<p class="lead text-info">@Model.LeastTweetedDayOfWeekName.Value</p>
 			}
 			<h2>Most tweeted month <small>(@Model.MostTweetedMonth.Count times)</small></h2>
-			<p>@Model.MostTweetedMonth.MonthName @Model.MostTweetedMonth.Year</p>
+			<p class="lead text-info">@Model.MostTweetedMonth.MonthName @Model.MostTweetedMonth.Year</p>
 			<h2>Most tweeted hour <small>(@Model.MostTweetedHourCount times)</small></h2>
-			<p>@Model.MostTweetedHour.ToString("0#"):00</p>
+			<p class="lead text-info">@Model.MostTweetedHour.ToString("0#"):00</p>
 			<h2>Least tweeted hour <small>(@Model.LeastTweetedHourCount times)</small></h2>
-			<p>@Model.LeastTweetedHour.ToString("0#"):00</p>
-			<h2>Longest time not tweeted <small>(between @Model.NotTweetedStartDate.ToString("d", CultureInfo.InvariantCulture) and @Model.NotTweetedEndDate.ToString("d", CultureInfo.InvariantCulture))</small></h2>
-			<p>@Model.LongestTimeNotTweeted.Days days</p>
+			<p class="lead text-info">@Model.LeastTweetedHour.ToString("0#"):00</p>
+			<h2>Longest number of days not tweeted <small>(between @Model.NotTweetedStartDate.ToString("d", CultureInfo.InvariantCulture) and @Model.NotTweetedEndDate.ToString("d", CultureInfo.InvariantCulture))</small></h2>
+			<div id="counter-longestDaysNotTweetedCount" class="flip-counter"></div><div class="clearfix"></div>
 		</section>
 		<section id="textAnalysys">
 			<div class="page-header">
@@ -113,9 +113,9 @@
 			<h2>Average words typed per tweet</h2>
 			<div id="counter-averageWordCount" class="flip-counter"></div><div class="clearfix"></div>
 			<h2>Most used word <small>(@Model.MostUsedWordCount times)</small></h2>
-			<p>@Model.MostUsedWord</p>
-			<h2>Most duplicated tweet <small>(@Model.MostDuplicatedTweetCount times)</small></h2>
-			<p>@Model.MostDuplicatedTweet</p>
+			<p class="lead text-info">@Model.MostUsedWord</p>
+			<h2>Most duplicated tweet text <small>(@Model.MostDuplicatedTweetCount times)</small></h2>
+			<p class="lead text-info">@Model.MostDuplicatedTweet</p>
 		</section>
 		<section id="links">
 			<div class="page-header">
@@ -124,9 +124,9 @@
 			<h2>Links tweeted</h2>
 			<div id="counter-linkCount" class="flip-counter"></div><div class="clearfix"></div>
 			<h2>Most linked URL <small>(@Model.MostLinkedUrlCount times)</small></h2>
-			<p><a href="@Model.MostLinkedUrl">@Model.MostLinkedUrl</a></p>
+			<p class="lead text-info"><a href="@Model.MostLinkedUrl">@Model.MostLinkedUrl</a></p>
 			<h2>Most linked domain <small>(@Model.MostLinkedDomainCount times)</small></h2>
-			<p><a href="http://@Model.MostLinkedDomain">@Model.MostLinkedDomain</a></p>
+			<p class="lead text-info"><a href="http://@Model.MostLinkedDomain">@Model.MostLinkedDomain</a></p>
 		</section>
 		<section id="thirdParty">
 			<div class="page-header">
@@ -181,6 +181,9 @@ $(function() {
 	var replyCount = new flipCounter('counter-replyCount', {});
 	replyCount.incrementTo(@Model.ReplyCount, time, pace);
 	
+	var longestDaysNotTweetedCount = new flipCounter('counter-longestDaysNotTweetedCount', {});
+	longestDaysNotTweetedCount.incrementTo(@Model.LongestTimeNotTweeted.Days, time, pace);
+	
 	var totalCharCount = new flipCounter('counter-totalCharCount', {});
 	totalCharCount.incrementTo(@Model.TotalCharCount, time, pace);
 	
@@ -223,7 +226,8 @@ $(function() {
 				width:900, 
 				height:400,
 				chartArea:{left:50,top:10,width:"90%",height:"80%"},
-				legend: {position: 'none'}
+				legend: {position: 'none'},
+				colors: ['#3a87ad']
 			};
 			chart.draw(data, options);
 		}, 'packages': ['corechart'] });

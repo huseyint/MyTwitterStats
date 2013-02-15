@@ -21,5 +21,25 @@ namespace MyTwitterStats.Helpers
 
 			return new MvcHtmlString(blockquote.ToString());
 		}
+
+		public static MvcHtmlString TwitterAccountLink(this HtmlHelper helper, string account)
+		{
+			var a = new TagBuilder("a");
+			a.Attributes["href"] = string.Format("https://twitter.com/{0}", account);
+			a.Attributes["target"] = "_blank";
+			a.SetInnerText("@" + account);
+
+			return new MvcHtmlString(a.ToString());
+		}
+
+		public static MvcHtmlString TwitterHashSearchLink(this HtmlHelper helper, string hash)
+		{
+			var a = new TagBuilder("a");
+			a.Attributes["href"] = string.Format("https://twitter.com/search?q=%23{0}&src=hash", hash);
+			a.Attributes["target"] = "_blank";
+			a.SetInnerText("#" + hash);
+
+			return new MvcHtmlString(a.ToString());
+		}
 	}
 }
