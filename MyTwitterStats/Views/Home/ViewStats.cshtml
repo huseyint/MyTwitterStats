@@ -208,17 +208,29 @@ $(function() {
 	var linkCount = new flipCounter('counter-linkCount', {});
 	linkCount.incrementTo(@Model.LinkCount, time, pace);
 	
+	@if (Model.ThirdPartySourceCounts["foursquare"] > 0)
+	{<text>
 	var foursquare = new flipCounter('counter-foursquare', {});
 	foursquare.incrementTo(@Model.ThirdPartySourceCounts["foursquare"], time, pace);
+	</text>}
 	
+	@if (Model.ThirdPartySourceCounts["Instagram"] > 0)
+	{<text>
 	var instagram = new flipCounter('counter-instagram', {});
 	instagram.incrementTo(@Model.ThirdPartySourceCounts["Instagram"], time, pace);
+	</text>}
 	
+	@if (Model.ThirdPartySourceCounts["Tumblr"] > 0)
+	{<text>
 	var tumblr = new flipCounter('counter-tumblr', {});
 	tumblr.incrementTo(@Model.ThirdPartySourceCounts["Tumblr"], time, pace);
+	</text>}
 	
+	@if (Model.ThirdPartySourceCounts["RunKeeper"] > 0)
+	{<text>
 	var runkeeper = new flipCounter('counter-runkeeper', {});
 	runkeeper.incrementTo(@Model.ThirdPartySourceCounts["RunKeeper"], time, pace);
+	</text>}
 	
 	setTimeout(function() {
 		google.load('visualization', '1', { 'callback': function() {
