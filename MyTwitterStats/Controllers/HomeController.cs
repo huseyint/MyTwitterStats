@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.IO.Compression;
@@ -16,8 +17,8 @@ namespace MyTwitterStats.Controllers
 {
 	public class HomeController : Controller
 	{
-		private const string AwsAccessKey = "AKIAIS55CGM5PDAFF7QA";
-		private const string AwsSecretAccessKey = "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";
+		private static readonly string AwsAccessKey = ConfigurationManager.AppSettings["AwsAccessKey"];
+		private static readonly string AwsSecretAccessKey = ConfigurationManager.AppSettings["AwsSecretAccessKey"];
 
 		public ActionResult Index()
 		{
